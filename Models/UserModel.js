@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
+    Name: {
+        type: String,
+        required: true,
+    },
     Email: {
         type: String,
         required: true,
@@ -15,9 +19,8 @@ const UserSchema = new mongoose.Schema({
         required: true,
     },
     CreatedAt: {
-        type: Date.now(),
-        required: true,
-        default: null,
+        type: Date,
+        default: Date.now(),
     },
     DeletedAt: {
         type: Date,
@@ -25,13 +28,19 @@ const UserSchema = new mongoose.Schema({
     },
     UserType: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'UsserType',
+        ref: 'UserType',
     },
-    Roles: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Roles'
-    },
-
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
+
+
+UserSchema.virtual('Roles', {
+    ref: 'UserRole',           // The model to use
+    localField: '_id',         // Find UserRoles where `UserId`...
+    foreignField: 'UserId',    // ...matches this User's `_id`
+});
+
 
 module.exports = mongoose.model("User", UserSchema);
