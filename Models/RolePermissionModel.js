@@ -12,3 +12,5 @@ const RolePermissionSchema = new mongoose.Schema({
         required: true,
     }
 });
+
+module.exports = mongoose.model('RolePermission', RolePermissionSchema);

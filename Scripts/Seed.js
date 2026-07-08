@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 
-const User = require('./Models/UserModel');
-const Role = require('./Models/RoleModel');
-const UserType = require('./Models/UserType');
-const UserRole = require('./Models/UserRole');
+const User = require('../Models/UserModel');
+const Role = require('../Models/RoleModel');
+const UserType = require('../Models/UserType');
+const UserRole = require('../Models/UserRole');
 
 dotenv.config();
 

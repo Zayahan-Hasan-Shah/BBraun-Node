@@ -1,46 +1,23 @@
-const UserModel = require('../Models/UserModel');
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const AuthService = require('../Services/AuthService');
 
-// export const Signup = async (req, res) => {
-//     try {
-//         const { Name, Email, PhoneNumber, Password } = req.body;
-//         let user = await UserModel.findOne({ Email });
-//         if (user) {
-//             console.log(`User already exist with this ${Email}`);
-//             res.status(400).json({
-//                 status: 400,
-//                 message: "User Already Exist"
-//             });
-//         }
+exports.Login = async (req, res) => {
+    try {
+        const { Email, Password } = req.body;
 
-//         let createdAt = Date.now();
+        const result = await AuthService.AuthenticateUser(Email, Password);
 
+        res.status(200).json({
+            message: "Login Successful",
+            token: result.token,
+            user: result.user,
+        });
+    } catch (e) {
+        if (e.message === "Invalid credentials") {
+            return res.status(400).json({ message: e.message });
+        }
 
-//         const salt = await bcrypt.genSalt(10);
-//         const PasswordHash = await bcrypt.hash(Password, salt);
+        console.error("Login Error: ", e);
+        res.status(500).json({ message: "Internal Server Error" });
 
-//         user = UserModel({
-//             FullName,
-//             Email,
-//             PhoneNumber,
-//             PasswordHash,
-//             createdAt
-//         });
-
-//         await user.save();
-
-//         res.status(201).json({
-//             status: 201,
-//             message: "User Created Successfully!"
-//         });
-
-//     } catch (e) {
-//         console.log("Internal Server: ", e);
-//         res.status(500).json({
-//             status: 500,
-//             message: "Internal Server Error"
-//         });
-//     }
-// }
+    }
+}

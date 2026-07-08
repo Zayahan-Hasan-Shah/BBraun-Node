@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Permission = require('./Models/PermissionModel');
+const Permission = require('../Models/PermissionModel');
 
 dotenv.config();
 
