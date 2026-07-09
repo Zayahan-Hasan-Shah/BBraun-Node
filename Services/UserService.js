@@ -1,7 +1,6 @@
 const UserModel = require('../Models/UserModel');
 const User = require('../Models/UserModel');
 const UserRole = require('../Models/UserRole');
-const bcrypt = require('bcrypt');
 
 class UserService {
     static async GetAllUsers() {

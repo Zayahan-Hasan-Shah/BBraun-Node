@@ -1,18 +1,18 @@
-const UserService = require("../Services/UserService");
+const RolePermissionService = require("../Services/RolePermissionService");
 
-const GetAllUsers = async (req, res,) => {
+const GetAllPermissions = async (req, res) => {
     try {
-        const result = await UserService.GetAllUsers();
+        const result = await RolePermissionService.GetAllPermissions();
 
         if (result.length == 0) {
             return res.status(200).json({
                 status: 200,
-                users: result
+                permissions: result
             });
         }
 
         return res.status(200).json({
-            users: result
+            permissions: result
         });
     } catch (e) {
         return res.status(500).json({
@@ -21,4 +21,4 @@ const GetAllUsers = async (req, res,) => {
     }
 }
 
-module.exports = { GetAllUsers }
+module.exports = { GetAllPermissions }

@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const { connectDB } = require('./db/db');
 const authRoutes = require('./Routes/AuthRoutes');
 const userRoutes = require('./Routes/UserRoutes');
+const rolePermissionRoutes = require('./Routes/RolePermissionRoutes');
 
 
 app = express();
@@ -14,6 +15,7 @@ connectDB();
 
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/rolepermission', rolePermissionRoutes);
 
 
 PORT = process.env.PORT || 3000;
