@@ -16,3 +16,5 @@ class RolePermissionService {
         }
     }
 }
+
+module.exports = RolePermissionService

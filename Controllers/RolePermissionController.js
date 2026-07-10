@@ -16,7 +16,7 @@ const GetAllPermissions = async (req, res) => {
         });
     } catch (e) {
         return res.status(500).json({
-            message: "Internal Server Error"
+            message: `Internal Server Error ${e}`
         });
     }
 }
