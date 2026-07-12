@@ -1,4 +1,5 @@
 const RolePermissionService = require("../Services/RolePermissionService");
+const { CreateRoleDto, RolePermissionDTO } = require("../DTOs/RolePermissionDTO");
 
 const GetAllPermissions = async (req, res) => {
     try {
@@ -21,4 +22,45 @@ const GetAllPermissions = async (req, res) => {
     }
 }
 
-module.exports = { GetAllPermissions }
+const CreateRole = async (req, res) => {
+    try {
+        const dto = new CreateRoleDto(
+            req.body.roleName,
+            req.body.permissionId
+        );
+
+        await RolePermissionService.createRole(
+            dto.roleName,
+            dto.permissionId
+        );
+
+        return res.status(201).json({
+            message: "Role created successfully"
+        });
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Server Error: ${e.message}`,
+        });
+    }
+}
+
+
+const GetAllRolePermissions = async (req, res) => {
+    try {
+        const result = await RolePermissionService.getAllRolePermissions();
+        const response = result.map(
+            role => new RolePermissionDTO(role)
+        );
+
+        return res.status(200).json({
+            roles: response
+        });
+
+    } catch (e) {
+        return res.status(500).json({
+            message: e.message
+        });
+    }
+}
+
+module.exports = { GetAllPermissions, CreateRole, GetAllRolePermissions }

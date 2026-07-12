@@ -1,6 +1,7 @@
 const Permission = require('../Models/PermissionModel');
 const Role = require('../Models/RoleModel');
 const RolePermission = require('../Models/RolePermissionModel');
+const mongoose = require("mongoose");
 
 class RolePermissionService {
 
@@ -13,6 +14,83 @@ class RolePermissionService {
             return permissions
         } catch (e) {
             throw new Error("Failed to load permissions");
+        }
+    }
+
+    static async createRole(roleName, permissionId) {
+        try {
+            const createRole = await Role.create({
+                Name: roleName,
+                IsSystem: false,
+                PrivilegeLevel: 1,
+            });
+
+            const rolePermissions = permissionId.map(id => ({
+                RoleId: createRole._id,
+                PermissionId: id,
+            }));
+
+            await RolePermission.insertMany(rolePermissions);
+
+        } catch (e) {
+            console.log(e);
+            throw new Error("Failed to create Role");
+        }
+    }
+
+    static async getAllRolePermissions() {
+        try {
+            const roles = await Role.aggregate([
+                {
+                    $lookup: {
+                        from: 'rolepermissions',
+                        localField: "_id",
+                        foreignField: "RoleId",
+                        as: "permissions"
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "permission",
+                        localField: "rolePermissions.PermissionId",
+                        foreignField: "_id",
+                        as: "permission"
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        Name: 1,
+                        IsSystem: 1,
+                        permissions: {
+                            $map: {
+                                input: "$permissions",
+                                as: "permission",
+                                in: {
+                                    _id: "$$permission._id",
+                                    Name: "$$permission.Name"
+                                }
+                            }
+                        }
+                    }
+                }
+                // {
+                //     $project: {
+                //         _id: 1,
+                //         Name: 1,
+                //         IsSystem: 1,
+                //         permissions: {
+                //             _id: 1,
+                //             Name: 1
+                //         }
+                //     }
+                // }
+            ]);
+
+            return roles;
+        } catch (e) {
+            console.log(e);
+            throw new Error("Failed to load role permissions");
         }
     }
 }
