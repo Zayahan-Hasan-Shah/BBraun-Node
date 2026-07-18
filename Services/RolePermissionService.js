@@ -43,18 +43,18 @@ class RolePermissionService {
             const roles = await Role.aggregate([
                 {
                     $lookup: {
-                        from: 'rolepermissions',
+                        from: "rolepermissions",
                         localField: "_id",
                         foreignField: "RoleId",
-                        as: "permissions"
-                    },
+                        as: "rolePermissions"
+                    }
                 },
                 {
                     $lookup: {
-                        from: "permission",
+                        from: "permissions",
                         localField: "rolePermissions.PermissionId",
                         foreignField: "_id",
-                        as: "permission"
+                        as: "permissions"
                     }
                 },
                 {
@@ -74,17 +74,6 @@ class RolePermissionService {
                         }
                     }
                 }
-                // {
-                //     $project: {
-                //         _id: 1,
-                //         Name: 1,
-                //         IsSystem: 1,
-                //         permissions: {
-                //             _id: 1,
-                //             Name: 1
-                //         }
-                //     }
-                // }
             ]);
 
             return roles;
