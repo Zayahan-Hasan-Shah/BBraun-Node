@@ -120,6 +120,43 @@ class RolePermissionService {
             throw new Error("Failed to update role");
         }
     }
+
+
+    static async deleteRole(roleId) {
+        try {
+            const role = await Role.findById({
+                _id: roleId
+            });
+
+            if (!role) {
+                throw new Error("Role not found");
+            }
+
+            if (role.IsSystem) {
+                throw new Error("System roles cannot be deleted");
+            }
+
+            await RolePermission.deleteMany({
+                RoleId: roleId
+            });
+
+
+            await Role.deleteOne({
+                _id: roleId
+            });
+
+            await RolePermission.deleteMany({
+                RoleId: roleId
+            });
+
+            return true;
+
+
+        } catch (e) {
+            console.log(e)
+            throw new Error("Failed to delete role");
+        }
+    }
 }
 
 module.exports = RolePermissionService

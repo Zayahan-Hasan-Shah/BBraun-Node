@@ -89,4 +89,22 @@ const UpdateRole = async (req, res) => {
     }
 };
 
-module.exports = { GetAllPermissions, CreateRole, GetAllRolePermissions, UpdateRole }
+
+const DeleteRole = async (req, res) => {
+    try {
+        await RolePermissionService.deleteRole(
+            req.params.roleId
+        );
+
+        return res.status(200).json({
+            message: "Role deleted successfully"
+        });
+
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Server Error: ${e.message}`
+        });
+    }
+}
+
+module.exports = { GetAllPermissions, CreateRole, GetAllRolePermissions, UpdateRole, DeleteRole }
