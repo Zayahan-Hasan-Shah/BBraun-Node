@@ -82,6 +82,44 @@ class RolePermissionService {
             throw new Error("Failed to load role permissions");
         }
     }
+
+    static async updateRole(roleName, roleId, permissionId,) {
+        try {
+            const updatedRole = await Role.findByIdAndUpdate(
+                roleId,
+                {
+                    Name: roleName
+                },
+                {
+                    new: true,
+                    runValidators: true
+                }
+            );
+
+            if (!updatedRole) {
+                throw new Error("Role not found");
+            }
+
+            await RolePermission.deleteMany({
+                RoleId: roleId
+            });
+
+            const rolePermissions = permissionId.map(id => ({
+                RoleId: roleId,
+                PermissionId: id
+            }));
+
+            if (rolePermissions.length > 0) {
+                await RolePermission.insertMany(rolePermissions);
+            }
+
+            return updatedRole;
+
+        } catch (e) {
+            console.log(e);
+            throw new Error("Failed to update role");
+        }
+    }
 }
 
 module.exports = RolePermissionService
