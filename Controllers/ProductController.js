@@ -23,6 +23,39 @@ const CreateProduct = async (req, res) => {
     }
 }
 
+
+const GetAllProducts = async (req, res) => {
+    try {
+        const products = await ProductService.getAllProducts();
+        return res.status(200).json({
+            products: products,
+            message: "Products loaded successfully"
+        });
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Server Error ${e}`
+        });
+    }
+}
+
+const GetProductById = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const product = await ProductService.getProductById(productId);
+        return res.status(200).json({
+            product: product,
+            message: "Product loaded successfully"
+        });
+    }
+    catch (e) {
+        return res.status(500).json({
+            message: `Internal Server Error ${e}`
+        });
+    }
+}
+
 module.exports = {
-    CreateProduct
+    CreateProduct,
+    GetAllProducts,
+    GetProductById
 };
