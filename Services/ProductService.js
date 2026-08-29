@@ -56,6 +56,16 @@ class ProductService {
             throw new Error("Failed to update product");
         }
     }
+
+    static async deleteProductById(prodId){
+        try{
+            await Product.deleteOne({_id: prodId});
+            return true;
+        } catch(e){
+            console.log(e);
+            throw new Error("Failed to delete product");
+        }
+    }
 }
 
 module.exports = ProductService;
