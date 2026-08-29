@@ -1,5 +1,5 @@
 const ProductService = require("../Services/ProductService");
-const { ProductDTO } = require("../DTOs/ProductDTO");
+const { ProductDTO, UpdateProductDTO } = require("../DTOs/ProductDTO");
 
 const CreateProduct = async (req, res) => {
     try {
@@ -54,8 +54,35 @@ const GetProductById = async (req, res) => {
     }
 }
 
+const updateProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const prod = new UpdateProductDTO({
+            _id: productId,
+            Name: req.body.Name,
+            Code: req.body.Code
+        });
+
+        const updatedProduct = await ProductService.updateProduct(
+            prod.id,
+            prod.Name,
+            prod.Code
+        );
+        return res.status(200).json({
+            product: updatedProduct,
+            success: true,
+            message: "Product updated successfully"
+        });
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Server Error ${e}`
+        });
+    }
+}
+
 module.exports = {
     CreateProduct,
     GetAllProducts,
-    GetProductById
+    GetProductById,
+    updateProduct
 };

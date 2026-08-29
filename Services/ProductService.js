@@ -40,6 +40,22 @@ class ProductService {
             throw new Error("Failed to load product");
         }
     }
+
+    static async updateProduct(prodId, prodName, prodCode) {
+        try {
+            const updatedProd = await Product.findByIdAndUpdate(prodId, {
+                Name: prodName,
+                Code: prodCode
+            }, { new: true });
+            if (!updatedProd) {
+                throw new Error("Product not found");
+            }
+            return updatedProd;
+        } catch (error) {
+            console.log(error);
+            throw new Error("Failed to update product");
+        }
+    }
 }
 
 module.exports = ProductService;

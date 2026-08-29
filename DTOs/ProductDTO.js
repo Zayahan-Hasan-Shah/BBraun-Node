@@ -6,4 +6,13 @@ class ProductDTO {
     }
 }
 
-module.exports = { ProductDTO };
+class UpdateProductDTO {
+    constructor(product){
+        this.id = product._id;
+        this.Name = product.Name;
+        this.Code = product.Code;
+    }
+
+}
+
+module.exports = { ProductDTO, UpdateProductDTO };
