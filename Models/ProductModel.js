@@ -14,6 +14,10 @@ const productSchema = new mongoose.Schema({
     DeletedAt: {
         type: Date,
         default: null,
+    },
+    softDelete: {
+        type: Boolean,
+        default: false, // 1 means not soft deleted
     }
 });
 

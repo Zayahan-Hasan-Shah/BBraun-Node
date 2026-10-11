@@ -17,7 +17,7 @@ class ProductService {
 
     static async getAllProducts() {
         try {
-            const products = await Product.find();
+            const products = await Product.find({ softDelete: false });
             if (products.length === 0 || !products) {
                 return [];
             }
@@ -30,7 +30,7 @@ class ProductService {
 
     static async getProductById(prodId) {
         try {
-            const product = await Product.findById(prodId);
+            const product = await Product.findById(prodId, softDelete = false);
             if (!product) {
                 throw new Error("Product not found");
             }
@@ -57,11 +57,18 @@ class ProductService {
         }
     }
 
-    static async deleteProductById(prodId){
-        try{
-            await Product.deleteOne({_id: prodId});
+    static async deleteProductById(prodId) {
+        try {
+            await Product.findByIdAndUpdate(
+                productId,
+                {
+                    softDelete: true,
+                    DeletedAt: new Date()
+                },
+                { new: true }
+            );
             return true;
-        } catch(e){
+        } catch (e) {
             console.log(e);
             throw new Error("Failed to delete product");
         }
