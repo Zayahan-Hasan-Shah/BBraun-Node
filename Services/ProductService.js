@@ -60,7 +60,7 @@ class ProductService {
     static async deleteProductById(prodId) {
         try {
             await Product.findByIdAndUpdate(
-                productId,
+                prodId,
                 {
                     softDelete: true,
                     DeletedAt: new Date()
